@@ -5,11 +5,7 @@ import { LoginForm } from "@/features/auth/components/login-form";
 const Page = async () => {
   await requireUnauth();
 
-  return (
-    <>
-      <LoginForm />
-    </>
-  );
+  return <LoginForm />;
 };
 
 export default Page;
