@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
-
-const Page = () => {
+const Page = async () => {
   return (
     <div className="flex min-h-screen min-w-screen items-center justify-center">
-      <Button variant="outline">Click me</Button>
+      Hello World
     </div>
   );
 };
