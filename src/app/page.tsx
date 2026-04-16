@@ -1,23 +1,18 @@
-import { Suspense } from "react";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+"use client";
 
-import { getQueryClient, trpc } from "@/trpc/server";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 
-import { Client } from "./client";
-
-const Page = async () => {
-  const queryClient = getQueryClient();
-
-  void queryClient.prefetchQuery(trpc.getUsers.queryOptions());
+const Page = () => {
+  const { data } = authClient.useSession();
 
   return (
-    <div className="flex min-h-screen min-w-screen items-center justify-center">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<p>loading...</p>}>
-          <Client />
-        </Suspense>
-      </HydrationBoundary>
-    </div>
+    <>
+      <div className="flex min-h-screen min-w-screen items-center justify-center">
+        {JSON.stringify(data)}
+        {data && <Button onClick={() => authClient.signOut()}>Logout</Button>}
+      </div>
+    </>
   );
 };
 
