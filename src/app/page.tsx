@@ -3,17 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { LogoutButton } from "./logout";
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const Page = () => {
   const trpc = useTRPC();
-  const queryClient = useQueryClient();
   const { data } = useQuery(trpc.getWorkflows.queryOptions());
 
   const create = useMutation(
     trpc.createWorkflow.mutationOptions({
       onSuccess: () => {
-        queryClient.invalidateQueries(trpc.getWorkflows.queryOptions());
+        toast.success("Job queued");
       },
     }),
   );
