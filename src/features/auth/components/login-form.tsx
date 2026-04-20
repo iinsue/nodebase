@@ -83,6 +83,12 @@ export function LoginForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      src="/logos/github.svg"
+                      alt="github"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Github
                   </Button>
 
@@ -92,6 +98,12 @@ export function LoginForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      src="/logos/google.svg"
+                      alt="google"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -104,8 +116,9 @@ export function LoginForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Email</FieldLabel>
+                        <FieldLabel htmlFor="login-email">Email</FieldLabel>
                         <Input
+                          id="login-email"
                           aria-invalid={fieldState.invalid}
                           type="email"
                           placeholder="m@example.com"
@@ -124,8 +137,11 @@ export function LoginForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Password</FieldLabel>
+                        <FieldLabel htmlFor="login-password">
+                          Password
+                        </FieldLabel>
                         <Input
+                          id="login-password"
                           aria-invalid={fieldState.invalid}
                           type="password"
                           placeholder="********"
