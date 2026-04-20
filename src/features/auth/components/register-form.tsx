@@ -93,6 +93,12 @@ export function RegisterForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      src="/logos/github.svg"
+                      alt="github"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Github
                   </Button>
 
@@ -102,6 +108,12 @@ export function RegisterForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      src="/logos/google.svg"
+                      alt="google"
+                      width={20}
+                      height={20}
+                    />
                     Continue with Google
                   </Button>
                 </div>
@@ -114,8 +126,9 @@ export function RegisterForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Email</FieldLabel>
+                        <FieldLabel htmlFor="signup-email">Email</FieldLabel>
                         <Input
+                          id="signup-email"
                           aria-invalid={fieldState.invalid}
                           type="email"
                           placeholder="m@example.com"
@@ -134,8 +147,11 @@ export function RegisterForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Password</FieldLabel>
+                        <FieldLabel htmlFor="signup-password">
+                          Password
+                        </FieldLabel>
                         <Input
+                          id="signup-password"
                           aria-invalid={fieldState.invalid}
                           type="password"
                           placeholder="********"
@@ -154,8 +170,11 @@ export function RegisterForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel>Confirm password</FieldLabel>
+                        <FieldLabel htmlFor="signup-confirm-password">
+                          Confirm password
+                        </FieldLabel>
                         <Input
+                          id="signup-confirm-password"
                           aria-invalid={fieldState.invalid}
                           type="password"
                           placeholder="********"
