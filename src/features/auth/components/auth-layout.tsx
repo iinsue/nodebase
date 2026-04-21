@@ -9,7 +9,13 @@ export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
           href="/"
           className="flex items-center gap-2 self-center font-medium"
         >
-          <Image src="/logos/logo.svg" alt="" width={30} height={30} />
+          <Image
+            src="/logos/logo.svg"
+            alt=""
+            width={30}
+            height={30}
+            unoptimized={true}
+          />
           <span className="font-bold uppercase">nodebase</span>
         </Link>
         {children}
