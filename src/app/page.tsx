@@ -10,6 +10,8 @@ const Page = () => {
   const trpc = useTRPC();
   const { data } = useQuery(trpc.getWorkflows.queryOptions());
 
+  const testAi = useMutation(trpc.testAi.mutationOptions());
+
   const create = useMutation(
     trpc.createWorkflow.mutationOptions({
       onSuccess: () => {
@@ -23,6 +25,10 @@ const Page = () => {
       <div className="flex min-h-screen min-w-screen flex-col items-center justify-center gap-y-6">
         <div>protected server component</div>
         <div>{JSON.stringify(data, null, 2)}</div>
+
+        <Button onClick={() => testAi.mutate()} disabled={testAi.isPending}>
+          Test AI
+        </Button>
 
         <Button disabled={create.isPending} onClick={() => create.mutate()}>
           Create workflow
