@@ -1,19 +1,15 @@
-import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
-
-import prisma from "@/lib/db";
+import { TRPCError } from "@trpc/server";
 import { inngest } from "@/inngest/client";
-
+import prisma from "@/lib/db";
 import { baseProcedure, createTRPCRouter, protectedProcedure } from "../init";
 
 export const appRouter = createTRPCRouter({
-  // 예제 - Google Generative AI 테스트
+  // 예제 - AI 테스트
   testAi: baseProcedure.mutation(async () => {
-    await inngest.send({
-      name: "execute/ai",
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message: "Something went wrong",
     });
-
-    return { success: true, message: "Job queued" };
   }),
 
   getUsers: protectedProcedure.query(({ ctx }) => {
