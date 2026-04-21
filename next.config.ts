@@ -1,8 +1,18 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/workflows",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {
@@ -13,8 +23,11 @@ export default withSentryConfig(nextConfig, {
 
   project: "nodebase",
 
-  // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
+  // 개발 서버에서는 Sentry 빌드 플러그인 로그 숨김. 프로덕션 빌드는 CI에서만 업로드 로그 출력.
+  silent: isDev || !process.env.CI,
+
+  // 개발 중 Sentry 빌드 플러그인 텔레메트리 비활성화
+  telemetry: !isDev,
 
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
