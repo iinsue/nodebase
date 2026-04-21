@@ -4,6 +4,8 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  // 좌측하단 N 으로 표시되는 Dev Indicator 비활성화
+  devIndicators: false,
   async redirects() {
     return [
       {
