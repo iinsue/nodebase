@@ -6,10 +6,11 @@ import { baseProcedure, createTRPCRouter, protectedProcedure } from "../init";
 export const appRouter = createTRPCRouter({
   // 예제 - AI 테스트
   testAi: baseProcedure.mutation(async () => {
-    throw new TRPCError({
-      code: "BAD_REQUEST",
-      message: "Something went wrong",
+    await inngest.send({
+      name: "execute/ai",
     });
+
+    return { success: true, message: "Job queued" };
   }),
 
   getUsers: protectedProcedure.query(({ ctx }) => {
