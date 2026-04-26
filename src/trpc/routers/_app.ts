@@ -1,11 +1,16 @@
 import { TRPCError } from "@trpc/server";
 import { inngest } from "@/inngest/client";
 import prisma from "@/lib/db";
-import { baseProcedure, createTRPCRouter, protectedProcedure } from "../init";
+import {
+  baseProcedure,
+  createTRPCRouter,
+  premiumProcedure,
+  protectedProcedure,
+} from "../init";
 
 export const appRouter = createTRPCRouter({
   // 예제 - AI 테스트
-  testAi: baseProcedure.mutation(async () => {
+  testAi: premiumProcedure.mutation(async () => {
     await inngest.send({
       name: "execute/ai",
     });
