@@ -113,7 +113,7 @@ export const AppSidebar = () => {
               <SidebarMenuButton
                 tooltip="Upgrade to Pro"
                 className="h-10 gap-x-4 px-4"
-                onClick={() => authClient.checkout({ slug: "Nodbase-Pro" })}
+                onClick={() => authClient.checkout({ slug: "Nodebase-Pro" })}
               >
                 <StarIcon className="size-4" />
                 <span>Upgrade to Pro</span>
