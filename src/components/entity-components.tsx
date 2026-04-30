@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { PlusIcon, SearchIcon } from "lucide-react";
 
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Input } from "./ui/input";
 
 type EntityHeaderProps = {
   title: string;
@@ -104,6 +104,48 @@ export const EntitySearch = ({
         onChange={(event) => onChange(event.target.value)}
         value={value}
       />
+    </div>
+  );
+};
+
+interface EntityPaginationProps {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  disabled?: boolean;
+}
+
+export const EntityPagination = ({
+  page,
+  totalPages,
+  onPageChange,
+  disabled,
+}: EntityPaginationProps) => {
+  return (
+    <div className="flex w-full items-center justify-between gap-x-2">
+      <div className="text-muted-foreground flex-1 text-sm">
+        Page {page} of {totalPages || 1}
+      </div>
+
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          disabled={page === 1 || disabled}
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(Math.max(1, page - 1))}
+        >
+          Previous
+        </Button>
+
+        <Button
+          disabled={page === totalPages || totalPages === 0 || disabled}
+          variant="outline"
+          size="sm"
+          onClick={() => onPageChange(Math.min(totalPages, page + 1))}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };
