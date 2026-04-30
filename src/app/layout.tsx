@@ -1,11 +1,12 @@
+import { Toaster } from "sonner";
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 
 import "./globals.css";
 
 import { cn } from "@/lib/utils";
 import { TRPCReactProvider } from "@/trpc/client";
-import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -44,7 +45,9 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <TRPCReactProvider>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </TooltipProvider>
           <Toaster />
         </TRPCReactProvider>
       </body>
