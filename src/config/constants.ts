@@ -4,3 +4,6 @@ export const PAGINATION = {
   MAX_PAGE_SIZE: 100,
   MIN_PAGE_SIZE: 1,
 };
+
+// http://localhost:3000/workflows?search=horse
+// http://localhost:3000/worflows

@@ -1,12 +1,36 @@
 "use client";
 
-import { EntityContainer, EntityHeader } from "@/components/entity-components";
+import { useRouter } from "next/navigation";
+
+import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
+import {
+  EntityContainer,
+  EntityHeader,
+  EntitySearch,
+} from "@/components/entity-components";
+
 import {
   useCreateWorkflow,
   useSuspenseWorkflows,
 } from "../hooks/use-workflows";
-import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
-import { useRouter } from "next/navigation";
+import { useEntitySearch } from "../hooks/use-entity-search";
+import { useWorkflowsParams } from "../hooks/use-workflows-params";
+
+export const WorkflowsSearch = () => {
+  const [params, setParams] = useWorkflowsParams();
+  const { searchValue, onSearchChange } = useEntitySearch({
+    params,
+    setParams,
+  });
+
+  return (
+    <EntitySearch
+      placeholder="Search workflows"
+      onChange={onSearchChange}
+      value={searchValue}
+    />
+  );
+};
 
 export const WorkflowsList = () => {
   const workflows = useSuspenseWorkflows();
@@ -54,7 +78,7 @@ export const WorkflowsContainer = ({
   return (
     <EntityContainer
       header={<WorkflowsHeader />}
-      search={<></>}
+      search={<WorkflowsSearch />}
       pagination={<></>}
     >
       {children}
