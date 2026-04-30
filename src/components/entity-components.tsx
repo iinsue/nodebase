@@ -101,6 +101,7 @@ export const EntitySearch = ({
       <Input
         className="bg-background border-border max-w-[200px] pl-8 shadow-none"
         placeholder={placeholder}
+        aria-label={placeholder}
         onChange={(event) => onChange(event.target.value)}
         value={value}
       />
