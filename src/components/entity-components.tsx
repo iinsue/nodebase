@@ -213,7 +213,7 @@ interface EmptyViewProps extends StateViewProps {
 
 export const EmptyView = ({ message, onNew }: EmptyViewProps) => {
   return (
-    <Empty className="border border-dashed bg-white">
+    <Empty className="bg-card border border-dashed">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <PackageOpenIcon />
@@ -300,7 +300,11 @@ export const EntityItem = ({
   };
 
   return (
-    <Link href={href} prefetch>
+    <Link
+      href={href}
+      prefetch
+      className={cn(isRemoving && "pointer-events-none")}
+    >
       <Card
         className={cn(
           "cursor-pointer p-4 shadow-none hover:shadow",
