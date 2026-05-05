@@ -126,7 +126,5 @@ model Connection {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  nodeId String?
-
   @@unique([fromNodeId, toNodeId, fromOutput, toInput])
 }
