@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useSetAtom } from "jotai";
+import { useState, useCallback, useEffect } from "react";
 import {
   ReactFlow,
   applyNodeChanges,
@@ -21,8 +22,10 @@ import { nodeComponents } from "@/config/node-components";
 import { ErrorView, LoadingView } from "@/components/entity-components";
 import { useSuspenseWorkflow } from "@/features/workflows/hooks/use-workflows";
 
-import "@xyflow/react/dist/style.css";
+import { editorAtom } from "../store/atoms";
 import { AddNodeButton } from "./add-node-button";
+
+import "@xyflow/react/dist/style.css";
 
 export const EditorLoading = () => {
   return <LoadingView message="Loading editor..." />;
@@ -34,6 +37,8 @@ export const EditorError = () => {
 
 export const Editor = ({ workflowId }: { workflowId: string }) => {
   const { data: workflow } = useSuspenseWorkflow(workflowId);
+
+  const setEditor = useSetAtom(editorAtom);
 
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);
@@ -54,6 +59,11 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
     [],
   );
 
+  // 라우트 전환 직후 새 에디터 초기화 전에 저장 버튼을 누르면 이전 워크플로우의 그래프가 현재 workflowId로 저장될 수 있는 현상 방지
+  useEffect(() => {
+    return setEditor(null);
+  }, [workflowId, setEditor]);
+
   return (
     <div className="size-full">
       <ReactFlow
@@ -63,7 +73,13 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeComponents}
+        onInit={setEditor}
         fitView
+        snapGrid={[10, 10]}
+        snapToGrid
+        panOnScroll
+        panOnDrag={true}
+        selectionOnDrag
       >
         <Background />
         <Controls />
