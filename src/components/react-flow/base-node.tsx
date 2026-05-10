@@ -13,10 +13,9 @@ export function BaseNode({ className, status, ...props }: BaseNodeProps) {
     <div
       className={cn(
         "bg-card text-card-foreground border-muted-foreground relative rounded-md border",
-        "hover:bg-accent ",
+        "hover:bg-accent",
         className,
       )}
-      tabIndex={0}
       {...props}
     >
       {props.children}

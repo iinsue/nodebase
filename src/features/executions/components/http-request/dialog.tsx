@@ -110,6 +110,7 @@ export const HttpRequestDialog = ({
                   <FieldLabel htmlFor={field.name}>Method</FieldLabel>
 
                   <Select
+                    name={field.name}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
@@ -187,8 +188,9 @@ export const HttpRequestDialog = ({
                     />
 
                     <FieldDescription>
-                      Static URL or use {"{{variables}}"} for simple values or{" "}
-                      {"{{json variable}}"} to stringify objects
+                      JSON with template variables. Use {"{{variables}}"} for
+                      simple values or {"{{json variable}}"} to stringify
+                      objects.
                     </FieldDescription>
 
                     {fieldState.invalid && (

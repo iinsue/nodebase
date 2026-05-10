@@ -1,7 +1,7 @@
 "use client";
 
 import { useSetAtom } from "jotai";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ReactFlow,
   applyNodeChanges,
@@ -58,6 +58,11 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     [],
   );
+
+  // 라우트 전환 직후 새 에디터 초기화 전에 저장 버튼을 누르면 이전 워크플로우의 그래프가 현재 workflowId로 저장될 수 있는 현상 방지
+  useEffect(() => {
+    return setEditor(null);
+  }, [workflowId, setEditor]);
 
   return (
     <div className="size-full">
