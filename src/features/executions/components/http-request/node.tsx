@@ -4,7 +4,9 @@ import { memo, useState } from "react";
 import { GlobeIcon } from "lucide-react";
 import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
 
+import { fetchHttpRequestRealtimeToken } from "./actions";
 import { BaseExecutionNode } from "../base-execution-node";
+import { useNodeStatus } from "../../hooks/use-node-status";
 import { HttpRequestFormValues, HttpRequestDialog } from "./dialog";
 
 type HttpRequestNodeData = {
@@ -21,7 +23,12 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { setNodes } = useReactFlow();
 
-  const nodeStatus = "initial";
+  const nodeStatus = useNodeStatus({
+    nodeId: props.id,
+    topic: "status",
+    refreshToken: fetchHttpRequestRealtimeToken,
+  });
+
   const nodeData = props.data as HttpRequestNodeData;
   const description = nodeData?.endpoint
     ? `${nodeData.method || "GET"}: ${nodeData.endpoint}`
