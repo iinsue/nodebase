@@ -7,14 +7,12 @@ import type { NodeStatus } from "@/components/react-flow/node-status-indicator";
 
 interface UseNodeStatusOptions {
   nodeId: string;
-  channel: string;
   topic: string;
   refreshToken: () => Promise<Realtime.Subscribe.ClientToken>;
 }
 
 export function useNodeStatus({
   nodeId,
-  channel,
   topic,
   refreshToken,
 }: UseNodeStatusOptions) {
@@ -37,7 +35,7 @@ export function useNodeStatus({
     if (!latestForNode || latestForNode.kind === "run") return;
 
     setStatus(latestForNode.data.status);
-  }, [messages.all, nodeId, channel, topic]);
+  }, [messages.all, nodeId, topic, manualTriggerChannel]);
 
   return status;
 }

@@ -27,7 +27,6 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
 
   const nodeStatus = useNodeStatus({
     nodeId: props.id,
-    channel: httpRequestChannel.name,
     topic: "status",
     refreshToken: fetchHttpRequestRealtimeToken,
   });
