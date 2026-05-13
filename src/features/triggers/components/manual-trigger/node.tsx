@@ -2,7 +2,6 @@ import { memo, useState } from "react";
 import { NodeProps } from "@xyflow/react";
 import { MousePointerIcon } from "lucide-react";
 
-import { manualTriggerChannel } from "@/inngest/channels/manual-trigger";
 import { useNodeStatus } from "@/features/triggers/hooks/use-node-status";
 
 import { ManualTriggerDialog } from "./dialog";

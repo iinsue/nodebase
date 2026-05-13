@@ -28,14 +28,14 @@ export function useNodeStatus({
   useEffect(() => {
     const latestForNode = [...messages.all].reverse().find((msg) => {
       if (msg.kind === "run") return false;
-      if (msg.topic !== "status") return false;
+      if (msg.topic !== topic) return false;
       return msg.data.nodeId === nodeId;
     });
 
     if (!latestForNode || latestForNode.kind === "run") return;
 
     setStatus(latestForNode.data.status);
-  }, [messages.all, nodeId, httpRequestChannel, topic]);
+  }, [messages.all, nodeId, topic]);
 
   return status;
 }
