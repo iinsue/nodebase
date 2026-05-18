@@ -4,6 +4,8 @@ import { memo, useState } from "react";
 import { GlobeIcon } from "lucide-react";
 import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
 
+import { httpRequestChannel } from "@/inngest/channels/http-request";
+
 import { fetchHttpRequestRealtimeToken } from "./actions";
 import { BaseExecutionNode } from "../base-execution-node";
 import { useNodeStatus } from "../../hooks/use-node-status";
@@ -26,6 +28,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const nodeStatus = useNodeStatus({
     nodeId: props.id,
     topic: "status",
+    channel: httpRequestChannel,
     refreshToken: fetchHttpRequestRealtimeToken,
   });
 

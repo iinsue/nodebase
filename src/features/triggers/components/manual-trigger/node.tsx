@@ -2,16 +2,18 @@ import { memo, useState } from "react";
 import { NodeProps } from "@xyflow/react";
 import { MousePointerIcon } from "lucide-react";
 
-import { useNodeStatus } from "@/features/triggers/hooks/use-node-status";
+import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
 
 import { ManualTriggerDialog } from "./dialog";
 import { BaseTriggerNode } from "../base-trigger-node";
 import { fetchManualTriggerRealtimeToken } from "./actions";
+import { manualTriggerChannel } from "@/inngest/channels/manual-trigger";
 
 export const ManualTriggerNode = memo((props: NodeProps) => {
   const nodeStatus = useNodeStatus({
     nodeId: props.id,
     topic: "status",
+    channel: manualTriggerChannel,
     refreshToken: fetchManualTriggerRealtimeToken,
   });
 
