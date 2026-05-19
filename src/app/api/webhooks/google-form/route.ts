@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: "Missing required query parameter: workflowId",
         },
-        { status: 500 },
+        { status: 400 },
       );
     }
 
@@ -35,6 +35,8 @@ export async function POST(request: NextRequest) {
         googleForm: formData,
       },
     });
+
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Google form webhook error:", error);
     return NextResponse.json(
