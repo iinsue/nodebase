@@ -1,5 +1,8 @@
+import Stripe from "stripe";
 import { sendWorkflowExecution } from "@/inngest/utils";
 import { type NextRequest, NextResponse } from "next/server";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,19 +15,32 @@ export async function POST(request: NextRequest) {
           success: false,
           error: "Missing required query parameter: workflowId",
         },
-        { status: 500 },
+        { status: 400 },
       );
     }
 
-    const body = await request.json();
+    const signature = request.headers.get("stripe-signature");
+    if (!signature) {
+      return NextResponse.json(
+        { success: false, error: "Missing Stripe signature" },
+        { status: 400 },
+      );
+    }
+
+    const payload = await request.text();
+    const event = stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!,
+    );
 
     const stripeData = {
       // Event metadata
-      eventId: body.id,
-      eventType: body.type,
-      timestamp: body.created,
-      livemode: body.livemode,
-      raw: body.data?.object,
+      eventId: event.id,
+      eventType: event.type,
+      timestamp: event.created,
+      livemode: event.livemode,
+      raw: (event.data as { object?: unknown })?.object,
     };
 
     // Trigger an Inngest job

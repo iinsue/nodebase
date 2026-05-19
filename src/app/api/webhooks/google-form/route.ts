@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
           success: false,
           error: "Missing required query parameter: workflowId",
         },
-        { status: 500 },
+        { status: 400 },
       );
     }
 

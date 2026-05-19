@@ -41,7 +41,7 @@ const triggerNodes: NodeTypeOption[] = [
   },
   {
     type: NodeType.STRIPE_TRIGGER,
-    label: "Stipe Event",
+    label: "Stripe Event",
     description: "Runs the flow when a Stripe Event is captured",
     icon: "/logos/stripe.svg",
   },

@@ -22,7 +22,7 @@ interface Props {
 
 export const StripeTriggerDialog = ({ open, onOpenChange }: Props) => {
   const params = useParams();
-  const workflowId = params.workflowId as string;
+  const workflowId = params.workflowId;
 
   // Construct the webhook URL
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -63,6 +63,8 @@ export const StripeTriggerDialog = ({ open, onOpenChange }: Props) => {
                 type="button"
                 size="icon"
                 variant="outline"
+                aria-label="Copy webhook URL"
+                disabled={!workflowId}
                 onClick={copyToClipboard}
               >
                 <CopyIcon className="size-4" />

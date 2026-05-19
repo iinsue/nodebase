@@ -25,6 +25,15 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
   context,
   step,
 }) => {
+  let publishedValidationError = false;
+
+  const publishHttpNodeError = async () => {
+    await step.realtime.publish("http-node-error", httpRequestChannel.status, {
+      nodeId,
+      status: "error",
+    });
+  };
+
   // Publish "loading" state for http request
   await step.realtime.publish("http-node-loading", httpRequestChannel.status, {
     nodeId,
@@ -35,14 +44,8 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
     const result = await step.run("http-request", async () => {
       if (!data.endpoint) {
         // Publish "error" state for http request
-        await step.realtime.publish(
-          "http-node-error",
-          httpRequestChannel.status,
-          {
-            nodeId,
-            status: "error",
-          },
-        );
+        await publishHttpNodeError();
+        publishedValidationError = true;
 
         throw new NonRetriableError(
           "HTTP Request node: No endpoint configured",
@@ -51,14 +54,8 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
 
       if (!data.variableName) {
         // Publish "error" state for http request
-        await step.realtime.publish(
-          "http-node-error",
-          httpRequestChannel.status,
-          {
-            nodeId,
-            status: "error",
-          },
-        );
+        await publishHttpNodeError();
+        publishedValidationError = true;
 
         throw new NonRetriableError(
           "HTTP Request node: Variable name not configured",
@@ -67,14 +64,8 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
 
       if (!data.method) {
         // Publish "error" state for http request
-        await step.realtime.publish(
-          "http-node-error",
-          httpRequestChannel.status,
-          {
-            nodeId,
-            status: "error",
-          },
-        );
+        await publishHttpNodeError();
+        publishedValidationError = true;
 
         throw new NonRetriableError("HTTP Request node: Method not configured");
       }
@@ -147,10 +138,9 @@ export const httpRequestExecutor: NodeExecutor<HttpRequestData> = async ({
     return result;
   } catch (error) {
     // Publish "error" state for http request
-    await step.realtime.publish("http-node-error", httpRequestChannel.status, {
-      nodeId,
-      status: "error",
-    });
+    if (!publishedValidationError) {
+      await publishHttpNodeError();
+    }
 
     throw error;
   }
