@@ -13,14 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -32,12 +24,6 @@ import {
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 
-export const AVAILABLE_MODELS = [
-  "gemini-2.5-flash",
-  "gemini-2.5-flash-lite",
-  "gemini-2.5-pro",
-] as const;
-
 const formSchema = z.object({
   variableName: z
     .string()
@@ -46,7 +32,6 @@ const formSchema = z.object({
       message:
         "Variable name must start with a letter or underscore and container only letters, numbers, and underscores",
     }),
-  model: z.enum(AVAILABLE_MODELS),
   systemPrompt: z.string().optional(),
   userPrompt: z.string().min(1, "User prompt is required"),
 });
@@ -70,13 +55,12 @@ export const GeminiDialog = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       variableName: defaultValues.variableName || "",
-      model: defaultValues.model || AVAILABLE_MODELS[0],
       systemPrompt: defaultValues.systemPrompt || "",
       userPrompt: defaultValues.userPrompt || "",
     },
   });
 
-  const watchVariableName = form.watch("variableName") || "myApiCall";
+  const watchVariableName = form.watch("variableName") || "myGemini";
 
   const handleSubmit = (values: GeminiFormValues) => {
     onSubmit(values);
@@ -88,7 +72,6 @@ export const GeminiDialog = ({
     if (open) {
       form.reset({
         variableName: defaultValues.variableName || "",
-        model: defaultValues.model || AVAILABLE_MODELS[0],
         systemPrompt: defaultValues.systemPrompt || "",
         userPrompt: defaultValues.userPrompt || "",
       });
@@ -122,55 +105,13 @@ export const GeminiDialog = ({
                   <Input
                     id={field.name}
                     aria-invalid={fieldState.invalid}
-                    placeholder="myApiCall"
+                    placeholder="myGemini"
                     {...field}
                   />
 
                   <FieldDescription>
                     Use this name to reference the result in other nodes:{" "}
                     {`{{${watchVariableName}.text}}`}
-                  </FieldDescription>
-
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="model"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Model</FieldLabel>
-
-                  <Select
-                    name={field.name}
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger
-                      id={field.name}
-                      aria-invalid={fieldState.invalid}
-                      className="w-full"
-                    >
-                      <SelectValue placeholder="Select a model" />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      <SelectGroup>
-                        {AVAILABLE_MODELS.map((model) => (
-                          <SelectItem key={model} value={model}>
-                            {model}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-
-                  <FieldDescription>
-                    The Google Gemini model to use for completion
                   </FieldDescription>
 
                   {fieldState.invalid && (

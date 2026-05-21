@@ -8,11 +8,10 @@ import { geminiChannel } from "@/inngest/channels/gemini";
 import { fetchGeminiRealtimeToken } from "./actions";
 import { BaseExecutionNode } from "../base-execution-node";
 import { useNodeStatus } from "../../hooks/use-node-status";
-import { AVAILABLE_MODELS, GeminiDialog, GeminiFormValues } from "./dialog";
+import { GeminiDialog, GeminiFormValues } from "./dialog";
 
 type GeminiNodeData = {
   variableName?: string;
-  model?: (typeof AVAILABLE_MODELS)[number];
   systemPrompt?: string;
   userPrompt?: string;
 };
@@ -32,7 +31,7 @@ export const GeminiNode = memo((props: NodeProps<GeminiNodeType>) => {
 
   const nodeData = props.data as GeminiNodeData;
   const description = nodeData?.userPrompt
-    ? `${nodeData.model || AVAILABLE_MODELS[0]}: ${nodeData.userPrompt.slice(0, 50)}...`
+    ? `"gemini-2.5-flash": ${nodeData.userPrompt.slice(0, 50)}...`
     : "Not configured";
 
   const handleOpenSettings = () => setDialogOpen(true);

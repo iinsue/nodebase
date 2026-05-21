@@ -1,7 +1,6 @@
 import { generateText } from "ai";
 import Handlebars from "handlebars";
 import { NonRetriableError } from "inngest";
-import ky, { type Options as KyOptions } from "ky";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 import { geminiChannel } from "@/inngest/channels/gemini";
@@ -9,7 +8,6 @@ import type { NodeExecutor } from "@/features/executions/types";
 
 type GeminiData = {
   variableName?: string;
-  model?: string;
   systemPrompt?: string;
   userPrompt?: string;
 };
@@ -27,8 +25,6 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
   context,
   step,
 }) => {
-  let publishedValidationError = false;
-
   const publishGeminiNodeError = async () => {
     await step.realtime.publish("gemini-node-error", geminiChannel.status, {
       nodeId,
@@ -72,7 +68,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
 
   try {
     const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
-      model: google(data.model || "gemini-2.5-flash"),
+      model: google("gemini-2.5-flash"),
       system: systemPrompt,
       prompt: userPrompt,
       experimental_telemetry: {
@@ -93,7 +89,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
     return {
       ...context,
       [data.variableName]: {
-        aiResponse: text,
+        text,
       },
     };
   } catch (error) {
