@@ -1,7 +1,7 @@
 import { realtime, staticSchema } from "inngest";
 
-export const openAiChannel = realtime.channel({
-  name: "openai-execution",
+export const anthropicChannel = realtime.channel({
+  name: "anthropic-execution",
   topics: {
     status: {
       schema: staticSchema<{
