@@ -1,12 +1,12 @@
 import { generateText } from "ai";
 import Handlebars from "handlebars";
 import { NonRetriableError } from "inngest";
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
+import { createOpenAI } from "@ai-sdk/openai";
 
-import { geminiChannel } from "@/inngest/channels/gemini";
+import { openAiChannel } from "@/inngest/channels/openai";
 import type { NodeExecutor } from "@/features/executions/types";
 
-type GeminiData = {
+type OpenAiData = {
   variableName?: string;
   systemPrompt?: string;
   userPrompt?: string;
@@ -19,35 +19,35 @@ Handlebars.registerHelper("json", (context) => {
   return safeString;
 });
 
-export const geminiExecutor: NodeExecutor<GeminiData> = async ({
+export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
   data,
   nodeId,
   context,
   step,
 }) => {
-  const publishGeminiNodeError = async () => {
-    await step.realtime.publish("gemini-node-error", geminiChannel.status, {
+  const publishOpenAiNodeError = async () => {
+    await step.realtime.publish("openai-node-error", openAiChannel.status, {
       nodeId,
       status: "error",
     });
   };
 
-  // Publish "loading" state for gemini
-  await step.realtime.publish("gemini-node-loading", geminiChannel.status, {
+  // Publish "loading" state for openai
+  await step.realtime.publish("openai-node-loading", openAiChannel.status, {
     nodeId,
     status: "loading",
   });
 
   if (!data.variableName) {
-    publishGeminiNodeError();
+    publishOpenAiNodeError();
 
-    throw new NonRetriableError("Gemini node: Variable name is missing");
+    throw new NonRetriableError("OpenAI node: Variable name is missing");
   }
 
   if (!data.userPrompt) {
-    publishGeminiNodeError();
+    publishOpenAiNodeError();
 
-    throw new NonRetriableError("Gemini node: User prompt is missing");
+    throw new NonRetriableError("OpenAI node: User prompt is missing");
   }
 
   // TODO: Throw if credential is missing
@@ -60,15 +60,15 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
 
   // TODO: Fetch credential that user selected
 
-  const credentialValue = process.env.GOOGLE_GENERATIVE_AI_API_KEY!;
+  const credentialValue = process.env.OPENAI_API_KEY!;
 
-  const google = createGoogleGenerativeAI({
+  const openai = createOpenAI({
     apiKey: credentialValue,
   });
 
   try {
-    const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
-      model: google("gemini-2.5-flash"),
+    const { steps } = await step.ai.wrap("openai-generate-text", generateText, {
+      model: openai("gpt-5.4-nano"),
       system: systemPrompt,
       prompt: userPrompt,
       experimental_telemetry: {
@@ -81,7 +81,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
     const text =
       steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
 
-    await step.realtime.publish("gemini-node-success", geminiChannel.status, {
+    await step.realtime.publish("openai-node-success", openAiChannel.status, {
       nodeId,
       status: "success",
     });
@@ -93,7 +93,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
       },
     };
   } catch (error) {
-    publishGeminiNodeError();
+    publishOpenAiNodeError();
 
     throw error;
   }
