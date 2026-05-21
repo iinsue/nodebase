@@ -30,6 +30,7 @@ export const executeWorkflow = inngest.createFunction(
         ],
       },
     ],
+    retries: 1,
   },
   async ({ event, step }) => {
     const workflowId = event.data.workflowId;

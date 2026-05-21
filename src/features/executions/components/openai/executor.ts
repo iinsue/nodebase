@@ -39,13 +39,13 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
   });
 
   if (!data.variableName) {
-    publishOpenAiNodeError();
+    await publishOpenAiNodeError();
 
     throw new NonRetriableError("OpenAI node: Variable name is missing");
   }
 
   if (!data.userPrompt) {
-    publishOpenAiNodeError();
+    await publishOpenAiNodeError();
 
     throw new NonRetriableError("OpenAI node: User prompt is missing");
   }
@@ -67,7 +67,7 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
   });
 
   try {
-    const { steps } = await step.ai.wrap("openai-generate-text", generateText, {
+    const { text } = await step.ai.wrap("openai-generate-text", generateText, {
       model: openai("gpt-5.4-nano"),
       system: systemPrompt,
       prompt: userPrompt,
@@ -77,9 +77,6 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
         recordOutputs: true,
       },
     });
-
-    const text =
-      steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
 
     await step.realtime.publish("openai-node-success", openAiChannel.status, {
       nodeId,
@@ -93,7 +90,7 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
       },
     };
   } catch (error) {
-    publishOpenAiNodeError();
+    await publishOpenAiNodeError();
 
     throw error;
   }

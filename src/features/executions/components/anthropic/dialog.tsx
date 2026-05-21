@@ -90,7 +90,7 @@ export const AnthropicDialog = ({
         </DialogHeader>
 
         <form
-          id="gemini-dialog"
+          id="anthropic-dialog"
           onSubmit={form.handleSubmit(handleSubmit)}
           className="mt-4 space-y-8"
         >
@@ -182,7 +182,7 @@ export const AnthropicDialog = ({
 
         <DialogFooter className="mt-4">
           <Field orientation="responsive">
-            <Button type="submit" form="gemini-dialog">
+            <Button type="submit" form="anthropic-dialog">
               Save
             </Button>
           </Field>

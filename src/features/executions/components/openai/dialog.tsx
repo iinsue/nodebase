@@ -90,7 +90,7 @@ export const OpenAiDialog = ({
         </DialogHeader>
 
         <form
-          id="gemini-dialog"
+          id="openai-dialog"
           onSubmit={form.handleSubmit(handleSubmit)}
           className="mt-4 space-y-8"
         >
@@ -182,7 +182,7 @@ export const OpenAiDialog = ({
 
         <DialogFooter className="mt-4">
           <Field orientation="responsive">
-            <Button type="submit" form="gemini-dialog">
+            <Button type="submit" form="openai-dialog">
               Save
             </Button>
           </Field>

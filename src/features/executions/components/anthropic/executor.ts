@@ -47,13 +47,13 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
   );
 
   if (!data.variableName) {
-    publishAnthropicNodeError();
+    await publishAnthropicNodeError();
 
     throw new NonRetriableError("Anthropic node: Variable name is missing");
   }
 
   if (!data.userPrompt) {
-    publishAnthropicNodeError();
+    await publishAnthropicNodeError();
 
     throw new NonRetriableError("Anthropic node: User prompt is missing");
   }
@@ -75,7 +75,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
   });
 
   try {
-    const { steps } = await step.ai.wrap(
+    const { text } = await step.ai.wrap(
       "anthropic-generate-text",
       generateText,
       {
@@ -89,9 +89,6 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
         },
       },
     );
-
-    const text =
-      steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
 
     await step.realtime.publish(
       "anthropic-node-success",
@@ -109,7 +106,7 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
       },
     };
   } catch (error) {
-    publishAnthropicNodeError();
+    await publishAnthropicNodeError();
 
     throw error;
   }

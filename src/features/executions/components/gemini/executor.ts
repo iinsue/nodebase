@@ -39,13 +39,13 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
   });
 
   if (!data.variableName) {
-    publishGeminiNodeError();
+    await publishGeminiNodeError();
 
     throw new NonRetriableError("Gemini node: Variable name is missing");
   }
 
   if (!data.userPrompt) {
-    publishGeminiNodeError();
+    await publishGeminiNodeError();
 
     throw new NonRetriableError("Gemini node: User prompt is missing");
   }
@@ -67,7 +67,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
   });
 
   try {
-    const { steps } = await step.ai.wrap("gemini-generate-text", generateText, {
+    const { text } = await step.ai.wrap("gemini-generate-text", generateText, {
       model: google("gemini-2.5-flash"),
       system: systemPrompt,
       prompt: userPrompt,
@@ -77,9 +77,6 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
         recordOutputs: true,
       },
     });
-
-    const text =
-      steps[0].content[0].type === "text" ? steps[0].content[0].text : "";
 
     await step.realtime.publish("gemini-node-success", geminiChannel.status, {
       nodeId,
@@ -93,7 +90,7 @@ export const geminiExecutor: NodeExecutor<GeminiData> = async ({
       },
     };
   } catch (error) {
-    publishGeminiNodeError();
+    await publishGeminiNodeError();
 
     throw error;
   }
