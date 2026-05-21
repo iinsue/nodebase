@@ -5,6 +5,9 @@ import { getExecutor } from "@/features/executions/lib/executor-registry";
 
 import { inngest } from "./client";
 import { topologicalSort } from "./utils";
+import { geminiChannel } from "./channels/gemini";
+import { openAiChannel } from "./channels/openai";
+import { anthropicChannel } from "./channels/anthropic";
 import { httpRequestChannel } from "./channels/http-request";
 import { manualTriggerChannel } from "./channels/manual-trigger";
 import { stripeTriggerChannel } from "./channels/stripe-trigger";
@@ -21,9 +24,13 @@ export const executeWorkflow = inngest.createFunction(
           httpRequestChannel,
           googleFormTriggerChannel,
           stripeTriggerChannel,
+          geminiChannel,
+          openAiChannel,
+          anthropicChannel,
         ],
       },
     ],
+    retries: 1,
   },
   async ({ event, step }) => {
     const workflowId = event.data.workflowId;
