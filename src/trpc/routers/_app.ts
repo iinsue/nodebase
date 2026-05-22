@@ -1,18 +1,11 @@
-import prisma from "@/lib/db";
-import { TRPCError } from "@trpc/server";
-import { inngest } from "@/inngest/client";
-
-import {
-  baseProcedure,
-  createTRPCRouter,
-  premiumProcedure,
-  protectedProcedure,
-} from "@/trpc/init";
+import { createTRPCRouter } from "@/trpc/init";
 
 import { workflowsRouter } from "@/features/workflows/server/routers";
+import { credentialsRouter } from "@/features/credentials/server/routers";
 
 export const appRouter = createTRPCRouter({
   workflows: workflowsRouter,
+  credentials: credentialsRouter,
 });
 
 // export type definition of API
