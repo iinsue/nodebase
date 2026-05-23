@@ -10,6 +10,7 @@ import { AnthropicDialog, AnthropicFormValues } from "./dialog";
 import { anthropicChannel } from "@/inngest/channels/anthropic";
 
 type AnthropicNodeData = {
+  credentialId?: string;
   variableName?: string;
   systemPrompt?: string;
   userPrompt?: string;

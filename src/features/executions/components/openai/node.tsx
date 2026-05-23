@@ -3,13 +3,15 @@
 import { memo, useState } from "react";
 import { useReactFlow, type Node, type NodeProps } from "@xyflow/react";
 
+import { openAiChannel } from "@/inngest/channels/openai";
+
 import { fetchOpenAiRealtimeToken } from "./actions";
 import { OpenAiDialog, OpenAiFormValues } from "./dialog";
 import { BaseExecutionNode } from "../base-execution-node";
 import { useNodeStatus } from "../../hooks/use-node-status";
-import { openAiChannel } from "@/inngest/channels/openai";
 
 type OpenAiNodeData = {
+  credentialId?: string;
   variableName?: string;
   systemPrompt?: string;
   userPrompt?: string;
