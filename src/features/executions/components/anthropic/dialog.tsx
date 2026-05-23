@@ -2,7 +2,7 @@
 
 import z from "zod";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -63,6 +63,7 @@ export const AnthropicDialog = ({
   onSubmit,
   defaultValues = {},
 }: Props) => {
+  const credentialSelectId = useId();
   const { data: credentials, isLoading: isLoadingCredentials } =
     useCredentialsByType(CredentialType.ANTHROPIC);
 
@@ -143,7 +144,7 @@ export const AnthropicDialog = ({
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="type-select">
+                  <FieldLabel htmlFor={credentialSelectId}>
                     Anthropic Credential
                   </FieldLabel>
                   <Select
@@ -152,7 +153,7 @@ export const AnthropicDialog = ({
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
-                      id="type-select"
+                      id={credentialSelectId}
                       aria-invalid={fieldState.invalid}
                       disabled={isLoadingCredentials || !credentials?.length}
                       className="w-full"

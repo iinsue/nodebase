@@ -64,23 +64,23 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
 
   const userPrompt = Handlebars.compile(data.userPrompt)(context);
 
-  const credential = await step.run("get-credential", () => {
-    return prisma.credential.findUnique({
-      where: {
-        id: data.credentialId,
-      },
-    });
-  });
-
-  if (!credential) {
-    throw new NonRetriableError("OpenAI node: Credential not found");
-  }
-
-  const openai = createOpenAI({
-    apiKey: credential.value,
-  });
-
   try {
+    const credential = await step.run("get-credential", () => {
+      return prisma.credential.findUnique({
+        where: {
+          id: data.credentialId,
+        },
+      });
+    });
+
+    if (!credential) {
+      throw new NonRetriableError("OpenAI node: Credential not found");
+    }
+
+    const openai = createOpenAI({
+      apiKey: credential.value,
+    });
+
     const { text } = await step.ai.wrap("openai-generate-text", generateText, {
       model: openai("gpt-5.4-nano"),
       system: systemPrompt,
