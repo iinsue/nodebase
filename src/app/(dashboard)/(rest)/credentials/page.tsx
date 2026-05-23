@@ -5,6 +5,12 @@ import { ErrorBoundary } from "react-error-boundary";
 import { HydrateClient } from "@/trpc/server";
 import { requireAuth } from "@/lib/auth-utils";
 
+import {
+  CredentialsList,
+  CredentialsError,
+  CredentialsLoading,
+  CredentialsContainer,
+} from "@/features/credentials/components/credentials";
 import { prefetchCredentials } from "@/features/credentials/server/prefetch";
 import { credentialsParamsLoader } from "@/features/credentials/server/params-loader";
 
@@ -19,13 +25,15 @@ const Page = async ({ searchParams }: Props) => {
   prefetchCredentials(params);
 
   return (
-    <HydrateClient>
-      <ErrorBoundary fallback={<p>Error</p>}>
-        <Suspense fallback={<p>Loading...</p>}>
-          <p>TODO: Credentials list</p>
-        </Suspense>
-      </ErrorBoundary>
-    </HydrateClient>
+    <CredentialsContainer>
+      <HydrateClient>
+        <ErrorBoundary fallback={<CredentialsError />}>
+          <Suspense fallback={<CredentialsLoading />}>
+            <CredentialsList />
+          </Suspense>
+        </ErrorBoundary>
+      </HydrateClient>
+    </CredentialsContainer>
   );
 };
 

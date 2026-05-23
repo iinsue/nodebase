@@ -17,13 +17,13 @@ import {
   ErrorView,
   LoadingView,
 } from "@/components/entity-components";
+import { useEntitySearch } from "@/hooks/use-entity-search";
 
 import {
   useCreateWorkflow,
   useRemoveWorkflow,
   useSuspenseWorkflows,
 } from "../hooks/use-workflows";
-import { useEntitySearch } from "../hooks/use-entity-search";
 import { useWorkflowsParams } from "../hooks/use-workflows-params";
 
 export const WorkflowsSearch = () => {
