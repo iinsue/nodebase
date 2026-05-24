@@ -2,6 +2,7 @@ import type { NodeTypes } from "@xyflow/react";
 
 import { NodeType } from "@/generated/prisma/enums";
 import { InitialNode } from "@/components/initial-node";
+import { SlackNode } from "@/features/executions/components/slack/node";
 import { GeminiNode } from "@/features/executions/components/gemini/node";
 import { OpenAiNode } from "@/features/executions/components/openai/node";
 import { DiscordNode } from "@/features/executions/components/discord/node";
@@ -21,6 +22,7 @@ export const nodeComponents = {
   [NodeType.OPENAI]: OpenAiNode,
   [NodeType.ANTHROPIC]: AnthropicNode,
   [NodeType.DISCORD]: DiscordNode,
+  [NodeType.SLACK]: SlackNode,
 } as const satisfies NodeTypes;
 
 export type RegisteredNodeType = keyof typeof nodeComponents;

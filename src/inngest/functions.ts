@@ -5,6 +5,7 @@ import { getExecutor } from "@/features/executions/lib/executor-registry";
 
 import { inngest } from "./client";
 import { topologicalSort } from "./utils";
+import { slackChannel } from "./channels/slack";
 import { geminiChannel } from "./channels/gemini";
 import { openAiChannel } from "./channels/openai";
 import { discordChannel } from "./channels/discord";
@@ -29,6 +30,7 @@ export const executeWorkflow = inngest.createFunction(
           openAiChannel,
           anthropicChannel,
           discordChannel,
+          slackChannel,
         ],
       },
     ],
