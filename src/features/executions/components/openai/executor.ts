@@ -76,8 +76,6 @@ export const openAiExecutor: NodeExecutor<OpenAiData> = async ({
     });
 
     if (!credential) {
-      await publishOpenAiNodeError();
-
       throw new NonRetriableError("OpenAI node: Credential not found");
     }
 

@@ -44,10 +44,10 @@ export const slackExecutor: NodeExecutor<SlackData> = async ({
     throw new NonRetriableError("Slack node: Message content is required");
   }
 
-  const rawContent = Handlebars.compile(data.content)(context);
-  const content = decode(rawContent);
-
   try {
+    const rawContent = Handlebars.compile(data.content)(context);
+    const content = decode(rawContent);
+
     const result = await step.run("slack-webhook", async () => {
       if (!data.webhookUrl) {
         await publishSlackNodeError();

@@ -31,7 +31,7 @@ const formSchema = z.object({
     .min(1, { message: "Variable name is required" })
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message:
-        "Variable name must start with a letter or underscore and container only letters, numbers, and underscores",
+        "Variable name must start with a letter or underscore and contain letters, numbers, and underscores",
     }),
   username: z.string().optional(),
   content: z

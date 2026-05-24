@@ -84,8 +84,6 @@ export const anthropicExecutor: NodeExecutor<AnthropicData> = async ({
     });
 
     if (!credential) {
-      await publishAnthropicNodeError();
-
       throw new NonRetriableError("Anthropic node: Credential not found");
     }
 
