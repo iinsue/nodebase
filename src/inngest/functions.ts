@@ -7,6 +7,7 @@ import { inngest } from "./client";
 import { topologicalSort } from "./utils";
 import { geminiChannel } from "./channels/gemini";
 import { openAiChannel } from "./channels/openai";
+import { discordChannel } from "./channels/discord";
 import { anthropicChannel } from "./channels/anthropic";
 import { httpRequestChannel } from "./channels/http-request";
 import { manualTriggerChannel } from "./channels/manual-trigger";
@@ -27,6 +28,7 @@ export const executeWorkflow = inngest.createFunction(
           geminiChannel,
           openAiChannel,
           anthropicChannel,
+          discordChannel,
         ],
       },
     ],
