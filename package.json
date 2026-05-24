@@ -36,6 +36,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.4.2",
     "handlebars": "^4.7.9",
+    "html-entities": "^2.6.0",
     "inngest": "^4.2.4",
     "jotai": "^2.20.0",
     "ky": "^2.0.2",
