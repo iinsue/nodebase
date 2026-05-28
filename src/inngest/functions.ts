@@ -19,7 +19,7 @@ import { googleFormTriggerChannel } from "./channels/google-form-trigger";
 export const executeWorkflow = inngest.createFunction(
   {
     id: "execute-workflow",
-    retries: 1, // TODO: REMOVE IN PRODUCTION
+    retries: process.env.NODE_ENV === "production" ? 3 : 0,
     onFailure: async ({ event, step }) => {
       return prisma.execution.update({
         where: { inngestEventId: event.data.event.id },
