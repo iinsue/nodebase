@@ -4,8 +4,8 @@ import { z } from "zod";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -35,6 +36,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const router = useRouter();
+  const [isSocialPending, setIsSocialPending] = useState(false);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -43,6 +45,52 @@ export function LoginForm() {
       password: "",
     },
   });
+
+  const signInGithub = async () => {
+    if (isSocialPending) return;
+    setIsSocialPending(true);
+
+    try {
+      await authClient.signIn.social(
+        {
+          provider: "github",
+        },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: () => {
+            toast.error("Something went wrong");
+          },
+        },
+      );
+    } finally {
+      setIsSocialPending(false);
+    }
+  };
+
+  const signInGoogle = async () => {
+    if (isSocialPending) return;
+    setIsSocialPending(true);
+
+    try {
+      await authClient.signIn.social(
+        {
+          provider: "google",
+        },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: () => {
+            toast.error("Something went wrong");
+          },
+        },
+      );
+    } finally {
+      setIsSocialPending(false);
+    }
+  };
 
   const onSubmit = async (values: LoginFormValues) => {
     await authClient.signIn.email(
@@ -62,7 +110,7 @@ export function LoginForm() {
     );
   };
 
-  const isPending = form.formState.isSubmitting;
+  const isPending = form.formState.isSubmitting || isSocialPending;
 
   return (
     <div className="flex flex-col gap-6">
@@ -82,6 +130,7 @@ export function LoginForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}
+                    onClick={signInGithub}
                   >
                     <Image
                       src="/logos/github.svg"
@@ -97,6 +146,7 @@ export function LoginForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}
+                    onClick={signInGoogle}
                   >
                     <Image
                       src="/logos/google.svg"

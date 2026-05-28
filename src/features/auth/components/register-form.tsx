@@ -4,11 +4,9 @@ import { z } from "zod";
 import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { cn } from "@/lib/utils";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,6 +25,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
 
 const registerSchema = z
   .object({
@@ -43,6 +42,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
+  const [isSocialPending, setIsSocialPending] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -52,6 +52,52 @@ export function RegisterForm() {
       confirmPassword: "",
     },
   });
+
+  const signInGithub = async () => {
+    if (isSocialPending) return;
+    setIsSocialPending(true);
+
+    try {
+      await authClient.signIn.social(
+        {
+          provider: "github",
+        },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: () => {
+            toast.error("Something went wrong");
+          },
+        },
+      );
+    } finally {
+      setIsSocialPending(false);
+    }
+  };
+
+  const signInGoogle = async () => {
+    if (isSocialPending) return;
+    setIsSocialPending(true);
+
+    try {
+      await authClient.signIn.social(
+        {
+          provider: "google",
+        },
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: () => {
+            toast.error("Something went wrong");
+          },
+        },
+      );
+    } finally {
+      setIsSocialPending(false);
+    }
+  };
 
   const onSubmit = async (values: RegisterFormValues) => {
     await authClient.signUp.email(
@@ -72,7 +118,7 @@ export function RegisterForm() {
     );
   };
 
-  const isPending = form.formState.isSubmitting;
+  const isPending = form.formState.isSubmitting || isSocialPending;
 
   return (
     <div className="flex flex-col gap-6">
@@ -92,6 +138,7 @@ export function RegisterForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}
+                    onClick={signInGithub}
                   >
                     <Image
                       src="/logos/github.svg"
@@ -107,6 +154,7 @@ export function RegisterForm() {
                     className="w-full"
                     type="button"
                     disabled={isPending}
+                    onClick={signInGoogle}
                   >
                     <Image
                       src="/logos/google.svg"
