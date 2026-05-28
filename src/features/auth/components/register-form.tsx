@@ -25,6 +25,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
 
 const registerSchema = z
   .object({
@@ -41,6 +42,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
   const router = useRouter();
+  const [isSocialPending, setIsSocialPending] = useState(false);
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -52,35 +54,49 @@ export function RegisterForm() {
   });
 
   const signInGithub = async () => {
-    await authClient.signIn.social(
-      {
-        provider: "github",
-      },
-      {
-        onSuccess: () => {
-          router.push("/");
+    if (isSocialPending) return;
+    setIsSocialPending(true);
+
+    try {
+      await authClient.signIn.social(
+        {
+          provider: "github",
         },
-        onError: () => {
-          toast.error("Something went wrong");
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: () => {
+            toast.error("Something went wrong");
+          },
         },
-      },
-    );
+      );
+    } finally {
+      setIsSocialPending(false);
+    }
   };
 
   const signInGoogle = async () => {
-    await authClient.signIn.social(
-      {
-        provider: "google",
-      },
-      {
-        onSuccess: () => {
-          router.push("/");
+    if (isSocialPending) return;
+    setIsSocialPending(true);
+
+    try {
+      await authClient.signIn.social(
+        {
+          provider: "google",
         },
-        onError: () => {
-          toast.error("Something went wrong");
+        {
+          onSuccess: () => {
+            router.push("/");
+          },
+          onError: () => {
+            toast.error("Something went wrong");
+          },
         },
-      },
-    );
+      );
+    } finally {
+      setIsSocialPending(false);
+    }
   };
 
   const onSubmit = async (values: RegisterFormValues) => {
@@ -102,7 +118,7 @@ export function RegisterForm() {
     );
   };
 
-  const isPending = form.formState.isSubmitting;
+  const isPending = form.formState.isSubmitting || isSocialPending;
 
   return (
     <div className="flex flex-col gap-6">
