@@ -1,1 +1,33 @@
-### Nodebase
+# Nodebase
+
+## 환경변수
+### Better Auth
+`BETTER_AUTH_SECRET`   
+`BETTER_AUTH_URL`   
+`GITHUB_CLIENT_ID`   
+`GITHUB_CLIENT_SECRET`   
+`GOOGLE_CLIENT_ID`   
+`GOOGLE_CLIENT_SECRET`   
+### Inngest
+`INNGEST_DEV`   
+### Google Generative AI
+`GOOGLE_GENERATIVE_AI_API_KEY`   
+### OpenAI
+`OPENAI_API_KEY`   
+### Anthropic
+`ANTHROPIC_API_KEY`   
+### Sentry
+`SENTRY_AUTH_TOKEN`   
+`SENTRY_DSN`   
+`NEXT_PUBLIC_SENTRY_DSN`   
+### Polar
+`POLAR_ACCESS_TOKEN`   
+`POLAR_SUCCESS_URL`   
+### Stripe
+`STRIPE_SECRET_KEY`   
+`STRIPE_WEBHOOK_SECRET`   
+### Other
+`NEXT_PUBLIC_APP_URL`   
+`NGROK_URL`   
+### Encryption
+`ENCRYPTION_KEY`   
